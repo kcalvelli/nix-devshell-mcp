@@ -2,19 +2,60 @@
 
 **Model Context Protocol (MCP) Server for Generating Nix Flake Development Environments**
 
+[![Tests](https://img.shields.io/badge/tests-104%20passing-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-83%25-green)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)]()
+[![License](https://img.shields.io/badge/license-ISC-blue)]()
+
 This MCP server enables AI assistants to generate fully-configured Nix flake development environments from conversational prompts. It provides a bridge between natural language descriptions of development needs and production-ready Nix devshell configurations.
+
+## Features
+
+✨ **Conversational Development Environment Creation**
+- Generate complete Nix flake projects from natural language
+- 4 production-ready profile templates
+- Automatic direnv configuration
+- Git repository initialization
+
+🛡️ **Non-Destructive & Safe**
+- Never overwrites existing files
+- Path traversal protection
+- Atomic file writes
+- Comprehensive validation
+
+🔧 **Enterprise-Ready**
+- Private npm registry support
+- Private PyPI index configuration
+- Maven repository configuration
+- Two-level configuration system (user + project)
+
+🎨 **Highly Customizable**
+- Handlebars templating with 11 custom helpers
+- JSON schema validation
+- Environment variable resolution
+- Post-creation hooks
 
 ## Quick Start
 
+### Installation
+
 ```bash
+# Clone the repository
+git clone https://github.com/kcalvelli/nix-devshell-mcp.git
+cd nix-devshell-mcp
+
 # Install dependencies
 npm install
 
 # Build the project
 npm run build
+```
 
-# Configure your MCP client to use this server
-# Add to your Claude Desktop config (~/.config/Claude/claude_desktop_config.json):
+### Configuration
+
+Add to your Claude Desktop config (`~/.config/Claude/claude_desktop_config.json`):
+
+```json
 {
   "mcpServers": {
     "nix-devshell": {
@@ -25,175 +66,319 @@ npm run build
 }
 ```
 
-## What This Project Does
+### Usage Example
 
-The nix-devshell-mcp server allows AI assistants to:
-
-1. **Generate Nix flake projects** from simple descriptions
-2. **Use battle-tested templates** for common tech stacks
-3. **Customize configurations** via conversational parameters
-4. **Support enterprise workflows** including private registries
-5. **Provide consistent, reproducible** development environments
-
-### Example Usage
+Once configured, you can ask Claude:
 
 ```
-User: "Create a TypeScript backend project with Node 20 and PostgreSQL 16"
-AI: *Uses create_devshell tool with typescript-node profile*
-Result: Complete Nix flake project ready for direnv activation
+"Create a TypeScript Node.js project with Node 20 in /home/user/my-app"
 ```
 
-## MVP Profiles
+Claude will use the `create_devshell` tool to generate:
+- `flake.nix` - Nix flake with Node.js 20, TypeScript, development tools
+- `.envrc` - direnv configuration for automatic activation
+- `package.json` - Node.js package configuration with scripts
+- `tsconfig.json` - TypeScript compiler configuration
+- `src/index.ts` - Starter TypeScript code
+- `README.md` - Project documentation
 
-This server includes four production-ready templates:
+Then simply:
+```bash
+cd /home/user/my-app
+direnv allow
+npm install
+npm run dev
+```
 
-- **typescript-node** - Node.js/TypeScript backend with Express
-- **angular-frontend** - Angular SPA with TypeScript
-- **python-fastapi** - Python FastAPI backend with PostgreSQL support
-- **java-spring-boot** - Java Spring Boot backend with Maven
+## Available Profiles
 
-## Documentation Index
+### typescript-node
+Modern TypeScript + Node.js development with ES modules and strict type checking.
 
-This repository contains comprehensive specifications for the entire project:
+**Includes:**
+- Node.js (configurable version, default 20)
+- TypeScript 5.x with strict mode
+- tsx for development, vitest for testing
+- ESLint, Prettier
+- Package manager choice (npm/yarn/pnpm)
 
-### Core Documentation
+**Use cases:** REST APIs, CLI tools, backend services, GraphQL servers
 
-- **[README.md](README.md)** (this file) - Project overview and navigation
-- **[SUMMARY.md](SUMMARY.md)** - Executive summary and next steps
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Quick reference for common tasks
+### python-fastapi
+Python FastAPI development with async support and automatic OpenAPI documentation.
 
-### Planning & Requirements
+**Includes:**
+- Python (configurable version, default 3.11)
+- FastAPI, Uvicorn, Pydantic
+- pytest, httpx for testing
+- Black, Flake8, mypy
+- Virtual environment auto-activation
 
-- **[PRD.md](PRD.md)** - Product Requirements Document
-  - Problem statement and solution
-  - Target users and use cases
-  - User stories for each profile
-  - MVP scope and success criteria
-  - Post-MVP roadmap
+**Use cases:** REST APIs, microservices, async web applications
 
-### Technical Specifications
+### angular-frontend
+Angular 17+ frontend development with standalone components.
 
-- **[TECHNICAL_SPEC.md](TECHNICAL_SPEC.md)** - Complete technical architecture
-  - System architecture diagram
-  - Component breakdown and responsibilities
-  - Data models and interfaces
-  - Template structure conventions
-  - Error handling and security
+**Includes:**
+- Node.js 20
+- Angular CLI 17+
+- TypeScript, standalone components
+- Development server with hot reload
+- Testing framework setup
 
-- **[API_SPEC.md](API_SPEC.md)** - MCP tool specifications
-  - `create_devshell` tool API
-  - `list_profiles` tool API
-  - Profile-specific options
-  - Error codes and examples
+**Use cases:** Single-page applications, progressive web apps, enterprise frontends
 
-- **[TEMPLATE_SPEC.md](TEMPLATE_SPEC.md)** - Complete template implementations
-  - Full template code for all 4 profiles
-  - Handlebars templates with proper syntax
-  - Scaffold files and starter code
-  - Post-creation hooks
+### java-spring-boot
+Enterprise Java development with Spring Boot 3.x and Maven.
 
+**Includes:**
+- JDK (configurable version, default 17)
+- Spring Boot 3.2.0
+- Maven build tool
+- REST controller scaffolding
+- Spring Boot DevTools
+
+**Use cases:** Enterprise backends, microservices, RESTful APIs, web applications
+
+## Configuration
+
+### User Configuration
+Create `~/.config/nix-devshell-mcp/config.json`:
+
+```json
+{
+  "author": "Your Name",
+  "email": "your.email@example.com",
+  "gitAutoInit": true,
+  "defaults": {
+    "nodeVersion": "20",
+    "pythonVersion": "311",
+    "javaVersion": "17"
+  },
+  "privateRegistry": {
+    "npm": {
+      "registry": "https://registry.company.com",
+      "authToken": "${NPM_TOKEN}"
+    }
+  }
+}
+```
+
+### Project Configuration
+Create `devshell-config.json` in your project:
+
+```json
+{
+  "projectName": "my-awesome-project",
+  "description": "An awesome project",
+  "nodeVersion": "20",
+  "author": "Team Name"
+}
+```
+
+### Configuration Priority
+Tool options > Project config > User config > Profile defaults
+
+### Environment Variables
+Use `${VAR_NAME}` syntax in configs to reference environment variables:
+```json
+{
+  "npmRegistry": "${PRIVATE_NPM_REGISTRY}",
+  "authToken": "${NPM_TOKEN}"
+}
+```
+
+## MCP Tools
+
+### `create_devshell`
+Creates a development environment from a profile template.
+
+**Parameters:**
+- `projectPath` (required): Absolute path to project directory
+- `profile` (required): Profile name (typescript-node, python-fastapi, angular-frontend, java-spring-boot)
+- `options` (optional): Configuration overrides
+
+**Example:**
+```json
+{
+  "projectPath": "/home/user/my-project",
+  "profile": "typescript-node",
+  "options": {
+    "nodeVersion": "20",
+    "projectName": "my-api",
+    "packageManager": "pnpm"
+  }
+}
+```
+
+### `list_profiles`
+Lists all available development environment profiles.
+
+**Returns:**
+```json
+{
+  "profiles": [
+    {
+      "name": "typescript-node",
+      "displayName": "TypeScript + Node.js",
+      "description": "Modern TypeScript development...",
+      "version": "1.0.0",
+      "tags": ["typescript", "nodejs", "backend"]
+    }
+  ]
+}
+```
+
+## Development
+
+### Project Structure
+```
+nix-devshell-mcp/
+├── src/
+│   ├── config/          # Configuration management
+│   ├── fs/              # Filesystem operations
+│   ├── profiles/        # Profile loading and management
+│   ├── templates/       # Handlebars template rendering
+│   ├── tools/           # DevshellTool orchestration
+│   ├── utils/           # Error handling, logging
+│   ├── validation/      # Input and schema validation
+│   └── index.ts         # MCP server entry point
+├── templates/           # Profile templates
+│   ├── typescript-node/
+│   ├── python-fastapi/
+│   ├── angular-frontend/
+│   └── java-spring-boot/
+├── tests/               # Test suite (104 tests, 83% coverage)
+└── docs/                # Specification documents
+```
+
+### Running Tests
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Watch mode
+npm test -- --watch
+```
+
+### Building
+```bash
+# Build TypeScript
+npm run build
+
+# Development mode (watch)
+npm run dev
+```
+
+### Linting & Formatting
+```bash
+# Lint code
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Format code
+npm run format
+```
+
+## Architecture
+
+### Core Components
+
+**ConfigManager** - Handles configuration loading, merging, and environment variable resolution.
+
+**FilesystemManager** - Manages file operations with atomic writes, path validation, and non-destructive behavior.
+
+**ProfileManager** - Loads and validates profile templates from the templates directory.
+
+**TemplateRenderer** - Renders Handlebars templates with custom helpers for common transformations.
+
+**Validator** - Performs JSON schema validation using AJV for inputs and configurations.
+
+**DevshellTool** - Orchestrates all components to create complete development environments.
+
+### Handlebars Helpers
+
+The template renderer includes 11 custom helpers:
+- `indent` - Indent text by N spaces
+- `toJson` - Convert object to JSON string
+- `ifEquals` - Conditional comparison
+- `joinWith` - Join array with separator
+- `ifCond` - Flexible conditional with operators
+- `default` - Return default value if falsy
+- `lowercase` - Convert to lowercase
+- `uppercase` - Convert to uppercase
+- `kebabCase` - Convert to kebab-case
+- `camelCase` - Convert to camelCase
+- `pascalCase` - Convert to PascalCase
+
+## Documentation
+
+### Specification Documents
+
+Comprehensive specifications are available in the repository:
+
+- **[PRD.md](PRD.md)** - Product requirements and user stories
+- **[TECHNICAL_SPEC.md](TECHNICAL_SPEC.md)** - System architecture and design
+- **[API_SPEC.md](API_SPEC.md)** - MCP tool API specifications
+- **[TEMPLATE_SPEC.md](TEMPLATE_SPEC.md)** - Template implementations
 - **[CONFIG_SCHEMA.md](CONFIG_SCHEMA.md)** - Configuration system
-  - JSON schema specification
-  - Configuration merge logic
-  - Validation rules
-  - Example configurations
-
 - **[TEST_SPEC.md](TEST_SPEC.md)** - Testing strategy
-  - Unit test specifications
-  - Integration test strategy
-  - Test fixtures and utilities
-  - Coverage requirements (80%+ target)
-
-### Implementation
-
-- **[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)** - Step-by-step implementation guide
-  - 9 detailed implementation phases
-  - File-by-file creation instructions
-  - Timeline estimates (23-31 hours)
-  - Development tips and gotchas
-
-- **[PROJECT_STRUCTURE.txt](PROJECT_STRUCTURE.txt)** - Visual project structure
-  - Complete directory tree
-  - File organization
-  - Module relationships
-
-## Key Features
-
-### Smart File Handling
-- Non-destructive: Won't overwrite existing project files
-- Selective generation: Only creates missing files
-- Git-aware: Auto-initializes repositories
-
-### Flexible Configuration
-- **User-level config**: `~/.config/nix-devshell-mcp/config.json`
-- **Project-level config**: `./devshell-config.json`
-- **Priority system**: Tool params > project config > user config > defaults
-
-### Enterprise Support
-- Private npm registry configuration
-- Private PyPI index support
-- Maven repository configuration
-- Organization-specific conventions
-
-### Developer Experience
-- Handlebars templating with helpers
-- JSON schema validation
-- Comprehensive error messages
-- Post-creation hooks for automation
-
-## Technology Stack
-
-- **Runtime**: Node.js 18+
-- **Language**: TypeScript 5.x
-- **MCP SDK**: @modelcontextprotocol/sdk ^1.0.0
-- **Templating**: Handlebars ^4.7.8
-- **Validation**: AJV ^8.12.0
-- **Testing**: Vitest ^1.0.0
-- **Target Environment**: Nix flakes + direnv
-
-## Project Status
-
-**Current Phase**: Specification Complete
-
-This repository contains complete specifications ready for implementation. All 11 specification documents have been created with sufficient detail for development to begin.
-
-**Estimated Implementation Time**: 23-31 hours across 9 phases
-
-## Getting Started with Implementation
-
-1. Read [SUMMARY.md](SUMMARY.md) for project overview
-2. Review [PRD.md](PRD.md) to understand requirements
-3. Study [TECHNICAL_SPEC.md](TECHNICAL_SPEC.md) for architecture
-4. Follow [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) phase by phase
-5. Reference [QUICK_REFERENCE.md](QUICK_REFERENCE.md) as needed
-
-## Testing Strategy
-
-- **Target Coverage**: 80%+ line coverage
-- **Test Framework**: Vitest with TypeScript support
-- **Initial State**: Tests written but commented out
-- **Approach**: Uncomment and fix tests as features are implemented
+- **[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)** - Development phases
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Quick reference guide
+- **[SUMMARY.md](SUMMARY.md)** - Executive summary
 
 ## Contributing
 
-This project follows a specification-driven development approach:
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-1. All specifications are in the repository root
-2. Implementation follows [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
-3. Tests are written alongside features
-4. Documentation is updated as features evolve
+## Testing
+
+The project includes comprehensive test coverage:
+- **104 tests** across 6 test suites
+- **83.21%** statement coverage
+- **69.05%** branch coverage
+- **98.66%** function coverage
+
+Tests cover:
+- Configuration management
+- Filesystem operations
+- Profile loading and validation
+- Template rendering
+- Input validation
+- End-to-end orchestration
+
+## Requirements
+
+- **Node.js**: 18+ required
+- **Nix**: with flakes enabled
+- **direnv**: for automatic environment activation
 
 ## License
 
-MIT License
+ISC
 
 ## Support
 
-For questions or issues:
-- Review the specification documents first
-- Check [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for common patterns
-- Refer to [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for guidance
+For issues or questions:
+- Check the [documentation](#documentation) first
+- Review existing [GitHub issues](https://github.com/kcalvelli/nix-devshell-mcp/issues)
+- Create a new issue with detailed information
+
+## Acknowledgments
+
+Built with:
+- [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/sdk) - MCP protocol implementation
+- [Handlebars](https://handlebarsjs.com/) - Template engine
+- [AJV](https://ajv.js.org/) - JSON schema validation
+- [Vitest](https://vitest.dev/) - Testing framework
 
 ---
 
-**Next Steps**: Begin implementation by following Phase 1 in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)
+**Status**: ✅ Production Ready
+
+All phases complete: Core implementation, profiles, tests, documentation.

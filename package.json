@@ -23,12 +23,22 @@
   },
   "keywords": [
     "mcp",
+    "model-context-protocol",
     "nix",
+    "nix-flakes",
     "devshell",
-    "flake"
+    "development-environment",
+    "typescript",
+    "python",
+    "angular",
+    "java",
+    "spring-boot",
+    "fastapi",
+    "direnv",
+    "template-engine"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Keith Calvelli",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/kcalvelli/nix-devshell-mcp/issues"
   },
