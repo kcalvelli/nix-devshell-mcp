@@ -1,0 +1,27 @@
+export enum ErrorCode {
+  INVALID_INPUT = 'INVALID_INPUT',
+  PROFILE_NOT_FOUND = 'PROFILE_NOT_FOUND',
+  INVALID_OPTIONS = 'INVALID_OPTIONS',
+  INVALID_PATH = 'INVALID_PATH',
+  INVALID_CONFIG = 'INVALID_CONFIG',
+  FILESYSTEM_ERROR = 'FILESYSTEM_ERROR',
+  PERMISSION_DENIED = 'PERMISSION_DENIED',
+  DIRECTORY_NOT_FOUND = 'DIRECTORY_NOT_FOUND',
+  TEMPLATE_ERROR = 'TEMPLATE_ERROR',
+  RENDER_ERROR = 'RENDER_ERROR',
+  HOOK_EXECUTION_FAILED = 'HOOK_EXECUTION_FAILED',
+  HOOK_TIMEOUT = 'HOOK_TIMEOUT',
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
+}
+
+export class McpError extends Error {
+  constructor(
+    public code: ErrorCode,
+    message: string,
+    public details?: unknown,
+  ) {
+    super(message);
+    this.name = 'McpError';
+  }
+}
