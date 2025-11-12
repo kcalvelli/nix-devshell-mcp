@@ -185,7 +185,7 @@ This project follows a specification-driven development approach:
 
 ## License
 
-[Specify your license here]
+MIT License
 
 ## Support
 
