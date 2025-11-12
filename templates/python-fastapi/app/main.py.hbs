@@ -1,0 +1,45 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI(
+    title="{{projectName}}",
+    description="{{description}}",
+    version="1.0.0"
+)
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+
+@app.get("/")
+async def root():
+    """Welcome endpoint"""
+    return {"message": "Welcome to {{projectName}}!"}
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int, q: str | None = None):
+    """Get an item by ID"""
+    result = {"item_id": item_id}
+    if q:
+        result["q"] = q
+    return result
+
+
+@app.post("/items/")
+async def create_item(item: Item):
+    """Create a new item"""
+    item_dict = item.model_dump()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict["price_with_tax"] = price_with_tax
+    return item_dict
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

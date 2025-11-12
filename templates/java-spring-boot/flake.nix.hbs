@@ -1,0 +1,53 @@
+{
+  description = "{{description}}";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        jdk = pkgs.jdk{{default javaVersion "17"}};
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            # Java Development Kit
+            jdk
+
+            # Build tools
+            maven
+
+            {{#if gitAutoInit}}
+            # Git
+            git
+            {{/if}}
+          ];
+
+          shellHook = ''
+            echo "🚀 Java + Spring Boot development environment"
+            echo "Java version: $(java -version 2>&1 | head -n 1)"
+            echo "Maven version: $(mvn -v | head -n 1)"
+            {{#if mavenRepository}}
+            echo "Using private Maven repository: {{mavenRepository}}"
+            {{/if}}
+            echo ""
+            echo "Available commands:"
+            echo "  mvn spring-boot:run      - Start development server"
+            echo "  mvn clean package        - Build JAR file"
+            echo "  mvn test                 - Run tests"
+            echo "  mvn clean install        - Install to local repository"
+            echo ""
+          '';
+
+          JAVA_HOME = "${jdk}";
+          {{#if mavenRepository}}
+          MAVEN_OPTS = "-Dmaven.repo.remote={{mavenRepository}}";
+          {{/if}}
+        };
+      }
+    );
+}

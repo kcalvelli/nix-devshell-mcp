@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "name": "typescript-node",
+    "displayName": "TypeScript + Node.js",
+    "description": "Modern TypeScript development with Node.js runtime, configured with ES modules, strict type checking, and common development tools.",
+    "version": "1.0.0",
+    "supportedOptions": [
+      {
+        "name": "nodeVersion",
+        "type": "string",
+        "description": "Node.js version (e.g., '20', '18', '16')",
+        "required": false,
+        "default": "20"
+      },
+      {
+        "name": "packageManager",
+        "type": "string",
+        "description": "Package manager to use",
+        "required": false,
+        "default": "npm",
+        "enum": ["npm", "yarn", "pnpm"]
+      },
+      {
+        "name": "projectName",
+        "type": "string",
+        "description": "Project name",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Project description",
+        "required": false
+      },
+      {
+        "name": "author",
+        "type": "string",
+        "description": "Author name",
+        "required": false
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "description": "Author email",
+        "required": false
+      },
+      {
+        "name": "npmRegistry",
+        "type": "string",
+        "description": "Private npm registry URL",
+        "required": false
+      },
+      {
+        "name": "gitAutoInit",
+        "type": "boolean",
+        "description": "Automatically initialize git repository",
+        "required": false,
+        "default": true
+      }
+    ],
+    "tags": ["typescript", "nodejs", "backend", "fullstack"],
+    "examples": [
+      "REST API server with Express",
+      "GraphQL API with Apollo Server",
+      "CLI tool with Commander",
+      "Backend service with TypeScript"
+    ],
+    "postCreate": "post-create.sh"
+  },
+  "templates": {
+    "flake": "flake.nix.hbs",
+    "envrc": ".envrc",
+    "tsconfig": "tsconfig.json.hbs",
+    "packageJson": "package.json.hbs",
+    "gitignore": ".gitignore",
+    "readme": "README.md.hbs",
+    "srcIndex": "src/index.ts"
+  },
+  "defaults": {
+    "nodeVersion": "20",
+    "packageManager": "npm",
+    "projectName": "my-typescript-project",
+    "description": "A TypeScript Node.js project",
+    "gitAutoInit": true
+  }
+}

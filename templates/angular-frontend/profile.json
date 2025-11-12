@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "name": "angular-frontend",
+    "displayName": "Angular Frontend",
+    "description": "Modern Angular frontend application with TypeScript, standalone components, and Angular CLI.",
+    "version": "1.0.0",
+    "supportedOptions": [
+      {
+        "name": "nodeVersion",
+        "type": "string",
+        "description": "Node.js version (e.g., '20', '18')",
+        "required": false,
+        "default": "20"
+      },
+      {
+        "name": "angularVersion",
+        "type": "string",
+        "description": "Angular CLI version (e.g., '17', '16')",
+        "required": false,
+        "default": "17"
+      },
+      {
+        "name": "projectName",
+        "type": "string",
+        "description": "Project name",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Project description",
+        "required": false
+      },
+      {
+        "name": "author",
+        "type": "string",
+        "description": "Author name",
+        "required": false
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "description": "Author email",
+        "required": false
+      },
+      {
+        "name": "npmRegistry",
+        "type": "string",
+        "description": "Private npm registry URL",
+        "required": false
+      },
+      {
+        "name": "gitAutoInit",
+        "type": "boolean",
+        "description": "Automatically initialize git repository",
+        "required": false,
+        "default": true
+      }
+    ],
+    "tags": ["angular", "typescript", "frontend", "spa"],
+    "examples": [
+      "Single Page Application with Angular",
+      "Component-based UI with routing",
+      "Progressive Web App",
+      "Enterprise frontend application"
+    ],
+    "postCreate": "post-create.sh"
+  },
+  "templates": {
+    "flake": "flake.nix.hbs",
+    "envrc": ".envrc",
+    "angularJson": "angular.json.hbs",
+    "packageJson": "package.json.hbs",
+    "tsconfig": "tsconfig.json",
+    "gitignore": ".gitignore",
+    "readme": "README.md.hbs",
+    "indexHtml": "src/index.html.hbs",
+    "mainTs": "src/main.ts.hbs",
+    "appComponent": "src/app/app.component.ts.hbs"
+  },
+  "defaults": {
+    "nodeVersion": "20",
+    "angularVersion": "17",
+    "projectName": "my-angular-app",
+    "description": "An Angular frontend application",
+    "gitAutoInit": true
+  }
+}

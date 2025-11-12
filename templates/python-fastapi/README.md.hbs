@@ -1,0 +1,65 @@
+# {{projectName}}
+
+{{description}}
+
+## Development Environment
+
+This project uses [Nix flakes](https://nixos.wiki/wiki/Flakes) for reproducible development environments and [direnv](https://direnv.net/) for automatic environment activation.
+
+### Prerequisites
+
+- [Nix](https://nixos.org/download.html) with flakes enabled
+- [direnv](https://direnv.net/)
+
+### Getting Started
+
+1. Allow direnv for this directory:
+   ```bash
+   direnv allow
+   ```
+
+2. Start the development server:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+3. Open your browser to http://localhost:8000
+   - API docs: http://localhost:8000/docs
+   - Alternative docs: http://localhost:8000/redoc
+
+## Available Commands
+
+- `uvicorn app.main:app --reload` - Start development server with hot reload
+- `pytest` - Run tests
+- `black .` - Format code with Black
+- `flake8 .` - Lint code
+- `mypy .` - Type check with mypy
+
+## Project Structure
+
+```
+{{projectName}}/
+├── app/
+│   ├── __init__.py
+│   └── main.py        # FastAPI application
+├── venv/              # Virtual environment
+├── flake.nix          # Nix development environment
+├── .envrc             # direnv configuration
+└── requirements.txt   # Python dependencies
+```
+
+## API Endpoints
+
+- `GET /` - Welcome endpoint
+- `GET /items/{item_id}` - Get item by ID
+- `POST /items/` - Create new item
+
+{{#if author}}
+## Author
+
+{{author}}{{#if email}} ({{email}}){{/if}}
+{{/if}}
+
+## License
+
+ISC

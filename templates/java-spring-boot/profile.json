@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "name": "java-spring-boot",
+    "displayName": "Java + Spring Boot",
+    "description": "Enterprise Java application development with Spring Boot, Maven, and modern Java features.",
+    "version": "1.0.0",
+    "supportedOptions": [
+      {
+        "name": "javaVersion",
+        "type": "string",
+        "description": "Java version (e.g., '17', '21')",
+        "required": false,
+        "default": "17"
+      },
+      {
+        "name": "springBootVersion",
+        "type": "string",
+        "description": "Spring Boot version (e.g., '3.2.0')",
+        "required": false,
+        "default": "3.2.0"
+      },
+      {
+        "name": "projectName",
+        "type": "string",
+        "description": "Project name",
+        "required": false
+      },
+      {
+        "name": "groupId",
+        "type": "string",
+        "description": "Maven group ID",
+        "required": false,
+        "default": "com.example"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Project description",
+        "required": false
+      },
+      {
+        "name": "author",
+        "type": "string",
+        "description": "Author name",
+        "required": false
+      },
+      {
+        "name": "mavenRepository",
+        "type": "string",
+        "description": "Private Maven repository URL",
+        "required": false
+      },
+      {
+        "name": "gitAutoInit",
+        "type": "boolean",
+        "description": "Automatically initialize git repository",
+        "required": false,
+        "default": true
+      }
+    ],
+    "tags": ["java", "spring-boot", "backend", "enterprise"],
+    "examples": [
+      "REST API with Spring Boot",
+      "Microservice with Spring Cloud",
+      "Web application with Spring MVC",
+      "Enterprise backend service"
+    ],
+    "postCreate": "post-create.sh"
+  },
+  "templates": {
+    "flake": "flake.nix.hbs",
+    "envrc": ".envrc",
+    "pomXml": "pom.xml.hbs",
+    "gitignore": ".gitignore",
+    "readme": "README.md.hbs",
+    "application": "src/main/resources/application.properties.hbs",
+    "demoApplication": "src/main/java/com/example/demo/DemoApplication.java.hbs",
+    "helloController": "src/main/java/com/example/demo/HelloController.java.hbs"
+  },
+  "defaults": {
+    "javaVersion": "17",
+    "springBootVersion": "3.2.0",
+    "projectName": "my-spring-boot-app",
+    "groupId": "com.example",
+    "description": "A Spring Boot application",
+    "gitAutoInit": true
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "name": "python-fastapi",
+    "displayName": "Python + FastAPI",
+    "description": "Modern Python REST API development with FastAPI, Pydantic validation, async support, and automatic OpenAPI documentation.",
+    "version": "1.0.0",
+    "supportedOptions": [
+      {
+        "name": "pythonVersion",
+        "type": "string",
+        "description": "Python version (e.g., '311', '310', '39')",
+        "required": false,
+        "default": "311"
+      },
+      {
+        "name": "projectName",
+        "type": "string",
+        "description": "Project name",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Project description",
+        "required": false
+      },
+      {
+        "name": "author",
+        "type": "string",
+        "description": "Author name",
+        "required": false
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "description": "Author email",
+        "required": false
+      },
+      {
+        "name": "pypiIndex",
+        "type": "string",
+        "description": "Private PyPI index URL",
+        "required": false
+      },
+      {
+        "name": "gitAutoInit",
+        "type": "boolean",
+        "description": "Automatically initialize git repository",
+        "required": false,
+        "default": true
+      }
+    ],
+    "tags": ["python", "fastapi", "rest-api", "backend"],
+    "examples": [
+      "REST API with FastAPI and Pydantic",
+      "Async web service with database",
+      "Microservice with OpenAPI docs",
+      "API backend with authentication"
+    ],
+    "postCreate": "post-create.sh"
+  },
+  "templates": {
+    "flake": "flake.nix.hbs",
+    "envrc": ".envrc",
+    "requirementsTxt": "requirements.txt",
+    "gitignore": ".gitignore",
+    "readme": "README.md.hbs",
+    "mainPy": "app/main.py.hbs",
+    "initPy": "app/__init__.py"
+  },
+  "defaults": {
+    "pythonVersion": "311",
+    "projectName": "my-fastapi-project",
+    "description": "A FastAPI Python project",
+    "gitAutoInit": true
+  }
+}

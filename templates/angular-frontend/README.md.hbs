@@ -1,0 +1,63 @@
+# {{projectName}}
+
+{{description}}
+
+## Development Environment
+
+This project uses [Nix flakes](https://nixos.wiki/wiki/Flakes) for reproducible development environments and [direnv](https://direnv.net/) for automatic environment activation.
+
+### Prerequisites
+
+- [Nix](https://nixos.org/download.html) with flakes enabled
+- [direnv](https://direnv.net/)
+
+### Getting Started
+
+1. Allow direnv for this directory:
+   ```bash
+   direnv allow
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start development server:
+   ```bash
+   ng serve
+   ```
+
+4. Open http://localhost:4200
+
+## Available Commands
+
+- `ng serve` - Start development server
+- `ng build` - Build for production
+- `ng test` - Run unit tests
+- `ng generate component <name>` - Generate a new component
+- `ng lint` - Lint code
+
+## Project Structure
+
+```
+{{projectName}}/
+├── src/
+│   ├── app/
+│   │   └── app.component.ts    # Root component
+│   ├── index.html              # HTML entry point
+│   └── main.ts                 # TypeScript entry point
+├── angular.json                # Angular CLI configuration
+├── tsconfig.json               # TypeScript configuration
+└── package.json                # Dependencies
+```
+
+{{#if author}}
+## Author
+
+{{author}}{{#if email}} ({{email}}){{/if}}
+{{/if}}
+
+## License
+
+ISC

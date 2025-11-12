@@ -1,0 +1,59 @@
+# {{projectName}}
+
+{{description}}
+
+## Development Environment
+
+This project uses [Nix flakes](https://nixos.wiki/wiki/Flakes) for reproducible development environments and [direnv](https://direnv.net/) for automatic environment activation.
+
+### Prerequisites
+
+- [Nix](https://nixos.org/download.html) with flakes enabled
+- [direnv](https://direnv.net/)
+
+### Getting Started
+
+1. Allow direnv for this directory:
+   ```bash
+   direnv allow
+   ```
+
+2. Start the development server:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+3. Open http://localhost:8080
+
+## Available Commands
+
+- `mvn spring-boot:run` - Start development server
+- `mvn clean package` - Build JAR file
+- `mvn test` - Run tests
+- `mvn clean install` - Install to local repository
+
+## Project Structure
+
+```
+{{projectName}}/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/demo/
+│   │   │   ├── DemoApplication.java    # Main application
+│   │   │   └── HelloController.java    # REST controller
+│   │   └── resources/
+│   │       └── application.properties  # Configuration
+│   └── test/
+├── pom.xml               # Maven configuration
+└── flake.nix             # Nix development environment
+```
+
+{{#if author}}
+## Author
+
+{{author}}
+{{/if}}
+
+## License
+
+ISC

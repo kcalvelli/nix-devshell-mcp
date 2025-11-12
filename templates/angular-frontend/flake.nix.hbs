@@ -1,0 +1,58 @@
+{
+  description = "{{description}}";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        nodejs = pkgs.nodejs_{{default nodeVersion "20"}};
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            # Node.js
+            nodejs
+
+            # Development tools
+            nodePackages."@angular/cli"
+            nodePackages.typescript
+            nodePackages.typescript-language-server
+            nodePackages.eslint
+            nodePackages.prettier
+
+            {{#if gitAutoInit}}
+            # Git
+            git
+            {{/if}}
+          ];
+
+          shellHook = ''
+            echo "🚀 Angular development environment"
+            echo "Node.js version: $(node --version)"
+            echo "Angular CLI version: $(ng version --minimal 2>/dev/null || echo 'Not installed yet')"
+            {{#if npmRegistry}}
+            echo "Using private npm registry: {{npmRegistry}}"
+            npm config set registry {{npmRegistry}}
+            {{/if}}
+            echo ""
+            echo "Available commands:"
+            echo "  npm install         - Install dependencies"
+            echo "  ng serve            - Start development server"
+            echo "  ng build            - Build for production"
+            echo "  ng test             - Run unit tests"
+            echo "  ng generate <type>  - Generate component/service/etc"
+            echo ""
+          '';
+
+          {{#if npmRegistry}}
+          NPM_CONFIG_REGISTRY = "{{npmRegistry}}";
+          {{/if}}
+        };
+      }
+    );
+}

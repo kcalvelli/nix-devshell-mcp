@@ -1,0 +1,81 @@
+{
+  description = "{{description}}";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        python = pkgs.python{{default pythonVersion "311"}};
+        pythonPackages = python.pkgs;
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            # Python
+            python
+
+            # Python packages
+            pythonPackages.pip
+            pythonPackages.virtualenv
+            pythonPackages.fastapi
+            pythonPackages.uvicorn
+            pythonPackages.pydantic
+            pythonPackages.python-multipart
+            pythonPackages.pytest
+            pythonPackages.pytest-asyncio
+            pythonPackages.httpx
+            pythonPackages.black
+            pythonPackages.flake8
+            pythonPackages.mypy
+
+            {{#if gitAutoInit}}
+            # Git
+            git
+            {{/if}}
+          ];
+
+          shellHook = ''
+            echo "🚀 Python + FastAPI development environment"
+            echo "Python version: $(python --version)"
+            echo "pip version: $(pip --version)"
+            {{#if pypiIndex}}
+            echo "Using private PyPI index: {{pypiIndex}}"
+            export PIP_INDEX_URL="{{pypiIndex}}"
+            {{/if}}
+
+            # Create virtual environment if it doesn't exist
+            if [ ! -d "venv" ]; then
+              echo "Creating virtual environment..."
+              python -m venv venv
+            fi
+
+            # Activate virtual environment
+            source venv/bin/activate
+
+            # Install dependencies
+            if [ -f "requirements.txt" ]; then
+              echo "Installing dependencies..."
+              pip install -q -r requirements.txt
+            fi
+
+            echo ""
+            echo "Available commands:"
+            echo "  uvicorn app.main:app --reload    - Start development server"
+            echo "  pytest                            - Run tests"
+            echo "  black .                           - Format code"
+            echo "  mypy .                            - Type check"
+            echo ""
+          '';
+
+          {{#if pypiIndex}}
+          PIP_INDEX_URL = "{{pypiIndex}}";
+          {{/if}}
+        };
+      }
+    );
+}
