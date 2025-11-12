@@ -1,0 +1,367 @@
+nix-devshell-mcp/
+│
+├── README.md                          # Project overview and navigation
+├── SUMMARY.md                         # Project summary and next steps
+├── PRD.md                             # Product Requirements Document
+├── TECHNICAL_SPEC.md                  # Technical architecture specification
+├── API_SPEC.md                        # MCP tool API specifications
+├── TEMPLATE_SPEC.md                   # Complete template code for all profiles
+├── TEST_SPEC.md                       # Testing strategy and specifications
+├── CONFIG_SCHEMA.md                   # Configuration schema and validation
+├── IMPLEMENTATION_PLAN.md             # 9-phase implementation guide
+├── QUICK_REFERENCE.md                 # Quick reference for common tasks
+├── PROJECT_STRUCTURE.txt              # This file
+│
+├── package.json                       # Node.js project configuration
+├── tsconfig.json                      # TypeScript configuration
+├── vitest.config.ts                   # Vitest test configuration
+├── .eslintrc.json                     # ESLint configuration
+├── .prettierrc                        # Prettier configuration
+├── .gitignore                         # Git ignore patterns
+│
+├── src/                               # Source code directory
+│   ├── index.ts                       # Main entry point, MCP server
+│   ├── types.ts                       # Common TypeScript types
+│   │
+│   ├── config/                        # Configuration management
+│   │   ├── ConfigManager.ts          # Load and merge configurations
+│   │   └── schema.json               # JSON schema for config validation
+│   │
+│   ├── fs/                            # Filesystem operations
+│   │   └── FilesystemManager.ts      # Safe file operations, path validation
+│   │
+│   ├── profiles/                      # Profile management
+│   │   └── ProfileManager.ts         # Load, validate, and manage profiles
+│   │
+│   ├── renderer/                      # Template rendering
+│   │   ├── Renderer.ts               # Handlebars template rendering
+│   │   ├── helpers.ts                # Custom Handlebars helpers
+│   │   └── context.ts                # Build render context
+│   │
+│   ├── tools/                         # MCP tool implementations
+│   │   ├── createDevshell.ts         # create_devshell tool
+│   │   └── listProfiles.ts           # list_profiles tool
+│   │
+│   ├── validation/                    # Input validation
+│   │   └── Validator.ts              # JSON schema validation with AJV
+│   │
+│   ├── executor/                      # Hook execution
+│   │   └── Executor.ts               # Execute post-creation hooks
+│   │
+│   └── utils/                         # Utility functions
+│       ├── logger.ts                 # Logging utility
+│       └── errors.ts                 # Error definitions and McpError class
+│
+├── profiles/                          # Profile templates directory
+│   │
+│   ├── typescript-node/              # TypeScript Node.js profile
+│   │   ├── profile.json              # Profile metadata and options
+│   │   ├── flake.nix.hbs             # Nix flake template
+│   │   ├── .envrc                    # direnv configuration (static)
+│   │   ├── hooks/                    # Post-creation hooks
+│   │   │   └── post-create.sh        # Git init, dependency notes (executable)
+│   │   └── scaffold/                 # Starter code templates
+│   │       ├── src/
+│   │       │   ├── index.ts.hbs      # Application entry point
+│   │       │   └── types.ts.hbs      # Type definitions
+│   │       ├── tests/
+│   │       │   └── index.test.ts.hbs # Test examples
+│   │       ├── package.json.hbs      # npm package configuration
+│   │       ├── tsconfig.json.hbs     # TypeScript configuration
+│   │       ├── .eslintrc.json.hbs    # ESLint configuration
+│   │       ├── .prettierrc.hbs       # Prettier configuration
+│   │       ├── README.md.hbs         # Project documentation
+│   │       └── .gitignore            # Git ignore patterns (static)
+│   │
+│   ├── angular-frontend/             # Angular frontend profile
+│   │   ├── profile.json              # Profile metadata and options
+│   │   ├── flake.nix.hbs             # Nix flake template
+│   │   ├── .envrc                    # direnv configuration (static)
+│   │   ├── hooks/                    # Post-creation hooks
+│   │   │   └── post-create.sh        # Git init, dependency notes (executable)
+│   │   └── scaffold/                 # Starter code templates
+│   │       ├── src/
+│   │       │   ├── app/
+│   │       │   │   ├── app.component.ts.hbs
+│   │       │   │   ├── app.component.html.hbs
+│   │       │   │   ├── app.component.{{options.styling}}.hbs
+│   │       │   │   ├── app.config.ts.hbs
+│   │       │   │   └── app.routes.ts.hbs
+│   │       │   ├── index.html.hbs
+│   │       │   ├── main.ts.hbs
+│   │       │   └── styles.{{options.styling}}.hbs
+│   │       ├── public/
+│   │       │   └── favicon.ico       # Favicon (static)
+│   │       ├── package.json.hbs      # npm package configuration
+│   │       ├── tsconfig.json.hbs     # TypeScript configuration
+│   │       ├── tsconfig.app.json.hbs # App-specific TS config
+│   │       ├── angular.json.hbs      # Angular CLI configuration
+│   │       ├── README.md.hbs         # Project documentation
+│   │       └── .gitignore            # Git ignore patterns (static)
+│   │
+│   ├── python-fastapi/               # Python FastAPI profile
+│   │   ├── profile.json              # Profile metadata and options
+│   │   ├── flake.nix.hbs             # Nix flake template
+│   │   ├── .envrc                    # direnv configuration (static)
+│   │   ├── hooks/                    # Post-creation hooks
+│   │   │   └── post-create.sh        # Git init, dependency notes (executable)
+│   │   └── scaffold/                 # Starter code templates
+│   │       ├── src/
+│   │       │   ├── __init__.py       # Package marker (static)
+│   │       │   ├── main.py.hbs       # FastAPI application
+│   │       │   ├── config.py.hbs     # Configuration
+│   │       │   └── database.py.hbs   # Database setup
+│   │       ├── tests/
+│   │       │   ├── __init__.py       # Package marker (static)
+│   │       │   └── test_main.py.hbs  # Test examples
+│   │       ├── pyproject.toml.hbs    # Poetry configuration
+│   │       ├── alembic.ini.hbs       # Alembic configuration (if enabled)
+│   │       ├── README.md.hbs         # Project documentation
+│   │       └── .gitignore            # Git ignore patterns (static)
+│   │
+│   └── java-spring-boot/             # Java Spring Boot profile
+│       ├── profile.json              # Profile metadata and options
+│       ├── flake.nix.hbs             # Nix flake template
+│       ├── .envrc                    # direnv configuration (static)
+│       ├── hooks/                    # Post-creation hooks
+│       │   └── post-create.sh        # Git init, dependency notes (executable)
+│       └── scaffold/                 # Starter code templates
+│           ├── src/
+│           │   ├── main/
+│           │   │   ├── java/
+│           │   │   │   └── com/
+│           │   │   │       └── example/
+│           │   │   │           └── {{project.name}}/
+│           │   │   │               ├── Application.java.hbs
+│           │   │   │               ├── controller/
+│           │   │   │               │   └── HealthController.java.hbs
+│           │   │   │               └── config/
+│           │   │   │                   └── ApplicationConfig.java.hbs
+│           │   │   └── resources/
+│           │   │       └── application.properties.hbs
+│           │   └── test/
+│           │       └── java/
+│           │           └── com/
+│           │               └── example/
+│           │                   └── {{project.name}}/
+│           │                       └── ApplicationTests.java.hbs
+│           ├── pom.xml.hbs           # Maven configuration
+│           ├── README.md.hbs         # Project documentation
+│           └── .gitignore            # Git ignore patterns (static)
+│
+├── tests/                            # Test suite directory
+│   ├── unit/                         # Unit tests
+│   │   ├── config/
+│   │   │   ├── ConfigManager.test.ts
+│   │   │   └── configMerge.test.ts
+│   │   ├── renderer/
+│   │   │   ├── Renderer.test.ts
+│   │   │   └── handlebarsHelpers.test.ts
+│   │   ├── fs/
+│   │   │   ├── FilesystemManager.test.ts
+│   │   │   └── pathValidation.test.ts
+│   │   ├── validation/
+│   │   │   ├── Validator.test.ts
+│   │   │   └── schemaValidation.test.ts
+│   │   ├── profiles/
+│   │   │   ├── ProfileManager.test.ts
+│   │   │   └── profileLoading.test.ts
+│   │   └── executor/
+│   │       └── Executor.test.ts
+│   │
+│   ├── integration/                  # Integration tests
+│   │   ├── createDevshell.test.ts   # Full project creation tests
+│   │   ├── listProfiles.test.ts     # Profile listing tests
+│   │   ├── endToEnd.test.ts         # End-to-end scenarios
+│   │   └── configOverrides.test.ts  # Configuration priority tests
+│   │
+│   ├── fixtures/                     # Test fixtures
+│   │   ├── profiles/                # Test profile templates
+│   │   │   └── test-profile/
+│   │   │       ├── profile.json
+│   │   │       ├── flake.nix.hbs
+│   │   │       └── scaffold/
+│   │   │           └── test.txt.hbs
+│   │   ├── configs/                 # Test configurations
+│   │   │   ├── user-config.json
+│   │   │   ├── project-config.json
+│   │   │   └── invalid-config.json
+│   │   └── expected/                # Expected output for validation
+│   │       └── typescript-node/
+│   │           ├── flake.nix
+│   │           ├── package.json
+│   │           └── tsconfig.json
+│   │
+│   └── utils/                        # Test utilities
+│       ├── testHelpers.ts           # Test helper functions
+│       ├── mockFs.ts                # Filesystem mocking
+│       └── fixtures.ts              # Fixture loading utilities
+│
+├── build/                            # Compiled JavaScript output (generated)
+│   ├── index.js                     # Compiled main entry point
+│   ├── config/
+│   ├── fs/
+│   ├── profiles/
+│   ├── renderer/
+│   ├── tools/
+│   ├── validation/
+│   ├── executor/
+│   └── utils/
+│
+├── coverage/                         # Test coverage reports (generated)
+│   ├── index.html                   # Coverage report HTML
+│   └── coverage-final.json          # Coverage data JSON
+│
+├── node_modules/                     # npm dependencies (generated)
+│
+├── scripts/                          # Utility scripts (optional)
+│   └── validate-profiles.ts         # Profile validation script
+│
+└── docs/                             # Additional documentation (optional)
+    ├── examples/                     # Usage examples
+    └── guides/                       # How-to guides
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          KEY DIRECTORIES EXPLANATION
+═══════════════════════════════════════════════════════════════════════════════
+
+src/
+────
+Contains all TypeScript source code organized by responsibility:
+- config/     : Configuration loading and merging
+- fs/         : Filesystem operations with safety checks
+- profiles/   : Profile loading and validation
+- renderer/   : Handlebars template rendering
+- tools/      : MCP tool implementations
+- validation/ : Input and configuration validation
+- executor/   : Post-creation hook execution
+- utils/      : Shared utilities (logging, errors)
+
+profiles/
+─────────
+Contains template profiles for different technology stacks.
+Each profile includes:
+- profile.json    : Metadata, supported options, defaults
+- flake.nix.hbs   : Nix flake template
+- .envrc          : direnv configuration
+- hooks/          : Post-creation scripts (executable)
+- scaffold/       : Starter code templates
+
+Current profiles:
+- typescript-node    : Node.js + TypeScript + Express/Fastify
+- angular-frontend   : Angular SPA with standalone components
+- python-fastapi     : Python + FastAPI + async support
+- java-spring-boot   : Java + Spring Boot 3.x + Maven
+
+tests/
+──────
+Comprehensive test suite with:
+- unit/         : Unit tests for individual components
+- integration/  : Integration tests for full workflows
+- fixtures/     : Test data and templates
+- utils/        : Test helper functions
+
+Target: 80%+ line coverage
+
+build/
+──────
+Generated directory containing compiled JavaScript from TypeScript source.
+Created by running: npm run build
+Not committed to version control.
+
+═══════════════════════════════════════════════════════════════════════════════
+                            FILE TYPE LEGEND
+═══════════════════════════════════════════════════════════════════════════════
+
+.ts         : TypeScript source files
+.hbs        : Handlebars template files (rendered with context)
+.json       : JSON configuration or metadata files
+.sh         : Shell scripts (post-creation hooks, must be executable)
+.md         : Markdown documentation files
+.txt        : Plain text files (this structure diagram)
+
+Static files (no .hbs extension) are copied as-is.
+Template files (.hbs extension) are rendered with Handlebars before writing.
+
+═══════════════════════════════════════════════════════════════════════════════
+                          IMPORTANT NOTES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. All specification documents are in the root directory for easy access
+2. Template files use .hbs extension and are rendered with Handlebars
+3. Static files have no .hbs extension and are copied as-is
+4. Post-create hooks must be executable (chmod +x)
+5. profile.json defines metadata and supported options for each profile
+6. Tests are initially commented out and uncommented during implementation
+7. build/ directory is generated and not committed to git
+8. Configuration files support both user-level and project-level locations
+
+═══════════════════════════════════════════════════════════════════════════════
+                       CONFIGURATION FILE LOCATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+User Config (Personal Defaults):
+  Linux/macOS: ~/.config/nix-devshell-mcp/config.json
+  Windows:     %APPDATA%\nix-devshell-mcp\config.json
+
+Project Config (Team/Project Settings):
+  {projectPath}/devshell-config.json
+
+Priority: Tool Options > Project Config > User Config > Profile Defaults
+
+═══════════════════════════════════════════════════════════════════════════════
+                            GENERATED PROJECTS
+═══════════════════════════════════════════════════════════════════════════════
+
+When a project is generated using create_devshell, it will have a structure
+similar to the profile's scaffold/ directory, plus:
+
+- flake.nix        : Rendered from flake.nix.hbs
+- .envrc           : Copied from profile
+- .git/            : Created by post-create.sh hook
+- README.md        : Rendered with project-specific information
+- Config files     : Rendered with user/project configuration
+- Starter code     : Rendered with selected options
+
+Example generated typescript-node project:
+
+my-project/
+├── flake.nix
+├── .envrc
+├── .git/
+├── src/
+│   ├── index.ts
+│   └── types.ts
+├── tests/
+│   └── index.test.ts
+├── package.json
+├── tsconfig.json
+├── .eslintrc.json
+├── .prettierrc
+├── README.md
+└── .gitignore
+
+═══════════════════════════════════════════════════════════════════════════════
+                        IMPLEMENTATION STATUS
+═══════════════════════════════════════════════════════════════════════════════
+
+Current Status: SPECIFICATION COMPLETE
+
+✅ All 11 specification documents created
+✅ Complete template code for all 4 profiles
+✅ Comprehensive implementation plan (9 phases)
+✅ Testing strategy defined
+✅ Configuration system designed
+✅ API specifications complete
+
+Next Step: Begin Phase 1 implementation (Project Setup)
+Estimated Time: 23-31 hours total
+
+Follow IMPLEMENTATION_PLAN.md for step-by-step instructions.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Version: 1.0.0
+Last Updated: 2025-11-12
+Document: PROJECT_STRUCTURE.txt
