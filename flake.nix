@@ -38,10 +38,9 @@
             cp -r build $out/lib/node_modules/nix-devshell-mcp/
             cp -r node_modules $out/lib/node_modules/nix-devshell-mcp/
 
-            # Copy profiles as templates (the app looks for 'templates' directory)
-            # If profiles directory exists and has content, copy it as templates
-            if [ -d profiles ] && [ "$(ls -A profiles 2>/dev/null)" ]; then
-              cp -r profiles $out/lib/node_modules/nix-devshell-mcp/templates
+            # Copy templates directory with all profiles
+            if [ -d templates ] && [ "$(ls -A templates 2>/dev/null)" ]; then
+              cp -r templates $out/lib/node_modules/nix-devshell-mcp/
             else
               # Create empty templates directory
               mkdir -p $out/lib/node_modules/nix-devshell-mcp/templates

@@ -52,7 +52,7 @@ nix-devshell-mcp/
 │       ├── logger.ts                 # Logging utility
 │       └── errors.ts                 # Error definitions and McpError class
 │
-├── profiles/                          # Profile templates directory
+├── templates/                         # Profile templates directory
 │   │
 │   ├── typescript-node/              # TypeScript Node.js profile
 │   │   ├── profile.json              # Profile metadata and options
@@ -238,8 +238,8 @@ Contains all TypeScript source code organized by responsibility:
 - executor/   : Post-creation hook execution
 - utils/      : Shared utilities (logging, errors)
 
-profiles/
-─────────
+templates/
+──────────
 Contains template profiles for different technology stacks.
 Each profile includes:
 - profile.json    : Metadata, supported options, defaults
